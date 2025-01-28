@@ -9,18 +9,18 @@ const Selectors = (function () {
   return { searchForm, searchInput, refreshBtn, img };
 })();
 
-function getGif(word) {
-  fetch(
-    `https://api.giphy.com/v1/gifs/translate?api_key=UyYp8PVGH92tMcbG2q5wiY71bF9P1vKV&s=${word}`,
-    { mode: 'cors' }
-  )
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (response) {
-      Selectors.img.src = response.data.images.original.url;
-    })
-    .catch((e) => console.error(e));
+async function getGif(word) {
+  try {
+    const response = await fetch(
+      `https://api.giphy.com/v1/gifs/translate?api_key=UyYp8PVGH92tMcbG2q5wiY71bF9P1vKV&s=${word}`,
+      { mode: 'cors' }
+    );
+    const gifData = await response.json();
+
+    Selectors.img.src = gifData.data.images.original.url;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 Selectors.searchForm.addEventListener('submit', (e) => {
